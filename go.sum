@@ -1,0 +1,4 @@
+github.com/google/uuid v1.2.0 h1:qJYtXnJRWmpe7m/3XlyhrsLrEURqHRM2kxzoxXqyUDs=
+github.com/google/uuid v1.2.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/walkerus/go-wiremock v1.5.0 h1:ipaYzaZnnOJRQS4wNFqz4YFphC/sM9GM+EiLEzv3KLc=
+github.com/walkerus/go-wiremock v1.5.0/go.mod h1:gMzQpReT5mG5T/PaW8pSFiPhazrcHb1mnf6JHdKwY5w=
