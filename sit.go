@@ -1,15 +1,25 @@
 package sit
 
-import "github.com/walkerus/go-wiremock"
+import (
+	"testing"
+
+	"github.com/walkerus/go-wiremock"
+)
 
 type SIT struct {
 	wiremock *wiremock.Client
+	T        *testing.T
 }
 
-func NewSIT(url string) *SIT {
+func NewSIT(t *testing.T, url string) *SIT {
 	return &SIT{
 		wiremock: wiremock.NewClient(url),
+		T:        t,
 	}
+}
+
+func (s *SIT) StubFor(stub StubRule) {
+	s.wiremock.StubFor(stub.StubRule)
 }
 
 func (s *SIT) Post(path string) StubRule {
