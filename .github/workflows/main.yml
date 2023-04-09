@@ -16,4 +16,3 @@ jobs:
         pwd
         echo ${GOPATH}
         echo ${GOROOT}
-        
