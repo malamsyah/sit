@@ -3,7 +3,7 @@ name: Run Go Tests
 on: [push]
 
 jobs:
-  test:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -14,8 +14,7 @@ jobs:
           - 8080:8080
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -23,9 +22,10 @@ jobs:
           go-version: 1.20
 
       - name: Install dependencies
-        run: |
-          go get .
-          go get gotest.tools/gotestsum
+        run: go get .
+
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum
 
       - name: Run unit test
         run: gotestsum --junitfile=out/junit-unit.xml --format=testname -- -coverprofile=out/coverage.out -covermode=atomic ./...
