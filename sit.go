@@ -3,6 +3,7 @@ package sit
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/walkerus/go-wiremock"
 )
 
@@ -18,40 +19,31 @@ func NewSIT(t *testing.T, url string) *SIT {
 	}
 }
 
-func (s *SIT) StubFor(stub StubRule) {
-	s.wiremock.StubFor(stub.StubRule)
-}
+func (s *SIT) StubFor(method, path string, option *StubOption) {
+	req := wiremock.NewStubRule(method, wiremock.URLPathEqualTo(path))
 
-func (s *SIT) Post(path string) StubRule {
-	return StubRule{
-		wiremock.Post(wiremock.URLPathEqualTo(path)),
+	if option.requestJSONBody != "" {
+		req.WithBodyPattern(wiremock.EqualToJson(option.requestJSONBody))
 	}
-}
 
-func (s *SIT) Get(path string) StubRule {
-	return StubRule{
-		wiremock.Get(wiremock.URLPathEqualTo(path)),
+	if option.requestQueryParams != nil {
+		for key, value := range option.requestQueryParams {
+			req.WithQueryParam(key, wiremock.EqualTo(value))
+		}
 	}
-}
 
-func (s *SIT) Put(path string) StubRule {
-	return StubRule{
-		wiremock.Put(wiremock.URLPathEqualTo(path)),
+	if option.requestHeader != nil {
+		for key, value := range option.requestHeader {
+			req.WithHeader(key, wiremock.EqualTo(value))
+		}
 	}
-}
 
-func (s *SIT) Delete(path string) StubRule {
-	return StubRule{
-		wiremock.Delete(wiremock.URLPathEqualTo(path)),
-	}
-}
+	req.WillReturnJSON(option.responseValue, option.responseHeaders, option.responseStatus)
 
-func (s *SIT) Patch(path string) StubRule {
-	return StubRule{
-		wiremock.Patch(wiremock.URLPathEqualTo(path)),
-	}
+	err := s.wiremock.StubFor(req)
+	assert.NoError(s.T, err)
 }
 
 func (s *SIT) Reset() error {
-	return s.wiremock.Clear()
+	return s.wiremock.Reset()
 }

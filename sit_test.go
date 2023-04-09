@@ -3,6 +3,7 @@ package sit
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -16,7 +17,8 @@ func (s *AssertionTestSuite) SetupSuite() {
 }
 
 func (s *AssertionTestSuite) SetupTest() {
-	// s.sit.Reset()
+	err := s.sit.Reset()
+	assert.NoError(s.T(), err)
 }
 
 func TestAssertionTest(t *testing.T) {
